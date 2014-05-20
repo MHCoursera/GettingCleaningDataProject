@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title>README for Getting and Cleaning Data Course Project</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+
+
+
+
+</head>
+
+<body>
+<h1>README for Getting and Cleaning Data Course Project</h1>
+
+<h1></h1>
+
+<h2>The Data</h2>
+
+<p>The source of the data is located at this url: <a href="https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip">https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip</a>.  The data represents accelerometer data tracked across six different activities and 100 subjects.  The subjects were divided into a training group and a test group, and the resulting data is split between the two groups.</p>
+
+<p>The file downloads as a .zip file.  Once unzipped it creates a new sub directory called UCI HAR Dataset, which in turn has two sub directories called TEST and TRAIN.  All files are gap delimited text files.  The primary measurement data is contained in two files contained in these sub directories: X_test.txt and X_train.txt.  Combined these two files provide 10,299 observations of 561 measured variables.  The observations are in rows and the variables are in columns.</p>
+
+<p>The specific activity number for each observation is contained in two additional files, also split between the two sub directories: y_train.txt and y_test.txt.  </p>
+
+<p>The subject numbers for the observations are similarly split between files subject_train.txt and subject_test.txt.</p>
+
+<p>The variable names (columns labels) are in a file called features.txt in the main UCI HAR Dataset directory.</p>
+
+<p>Lastly, the English descriptions of each activity are in a file called activity_labels.txt in the main UCI HAR Dataset directory.</p>
+
+<h2>The Process</h2>
+
+<ul>
+<li><p>The script is contained in an R file called run_analysis.R.  There are no additional scripts.  This script will download the file, unzip it to a new directory, clean and merge the data (combining test and training data), and create the two output files as follows.</p></li>
+<li><p>The first file created is a clean (tidy) data set of all of the mean and standard deviation observations for all subjects.  This data set is clearly labeled with English descriptions of the activity.  It is written to a file called meanSTD.txt in the UCI HAR DATASET directory.  The variables selected for this file were chosen based on the variable label.  All variables with a label that contained either &ldquo;mean&rdquo; or &ldquo;std&rdquo; were included in the ridy dataset.</p></li>
+<li><p>The second file is the mean of ALL variables in the full data set for each combination of subject and activity.</p></li>
+</ul>
+
+<h2>Specific Processing Sequence - See CodeBook.md for variable details</h2>
+
+<ol>
+<li><p>The two data sets were merged in order to maximize the observations available.  Merger required merging the subject and activity numbers as well as the primary data.</p></li>
+<li><p>Subject and activity numbers were added to the data set as columns on the left.</p></li>
+<li><p>Column labels were added from the features.txt file.</p></li>
+<li><p>Activity descriptions were added using the activity number as a cross reference.</p></li>
+<li><p>To create the first file, all variables that contained either the phrase &ldquo;mean&rdquo; or &ldquo;std&rdquo; 
+    were extracted to a subset, maintaining all of the descriptive information.<br/>
+    It is written to a file called meanSTD.txt in the UCI HAR DATASET directory.</p></li>
+<li><p>To create the second file, the mean of ALL variables is calculated using a combination of
+    the functions &ldquo;split&rdquo; and &ldquo;sapply&rdquo; across the split table.  It is saved as a file named 
+    meansBySubjectActivity.txt in the UCI HAR DATASET directory.</p></li>
+</ol>
+
+</body>
+
+</html>
+
